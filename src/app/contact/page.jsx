@@ -5,6 +5,11 @@ import styles from "./contact.module.css";
 
 // const HydrationTestNoSSR = dynamic(() => import("@/components/hydrationTest"), {ssr: false});
 
+export const metadata = {
+  title: "contact page",
+  description: "Contact description"
+}
+
 const ContactPage = () => {
   return (
     <div className={styles.container}>
