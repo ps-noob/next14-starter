@@ -47,7 +47,7 @@ export const handleLogout = async () => {
   await signOut();
 };
 
-export const register = async (formData) => {
+export const register = async (previousState, formData) => {
   const { username, password, email, passwordRepeat } =
     Object.fromEntries(formData);
 
@@ -71,17 +71,23 @@ export const register = async (formData) => {
 
     await newUser.save();
     console.log("saved to db");
+    return {success: true};
   } catch (err) {
     console.log(err);
     return { error: "Something went wrong" };
   }
 };
 
-export const login = async (formData) => {
+export const login = async (previousState, formData) => {
   const { username, password } = Object.fromEntries(formData);
   try {
     await signIn("credentials", { username, password });
   } catch (err) {
     console.log(err);
+    if(err.message.includes("CredentialsSignin")){
+      return {error: "Invalid username or password"}
+    }
+    throw err
+    //return{error: "Something went wrong"} //next auth redirects to homepage using nextjs redirect method and this method intentionally throws an error Error : NEXT_REDIRECT and being inside a try block this error will be caught in catch block; this can be  solved be either by removing the try catch block (not recommended) or throwing the error
   }
 };
